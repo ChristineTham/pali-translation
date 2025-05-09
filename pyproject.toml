@@ -1,0 +1,12 @@
+[project]
+name = "pali-translation"
+version = "0.1.0"
+description = "Pali Translation Tools using dpd.db"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aksharamukha>=2.3",
+    "rich>=14.0.0",
+    "sqlalchemy>=2.0.40",
+    "streamlit>=1.45.0",
+]
