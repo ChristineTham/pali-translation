@@ -690,43 +690,43 @@ class DpdHeadword(Base):
 
     @property
     def meaning_combo(self) -> str:
-        from tools.meaning_construction import make_meaning_combo
+        from dpd.meaning_construction import make_meaning_combo
 
         return make_meaning_combo(self)
 
     @property
     def meaning_combo_html(self) -> str:
-        from tools.meaning_construction import make_meaning_combo_html
+        from dpd.meaning_construction import make_meaning_combo_html
 
         return make_meaning_combo_html(self)
 
     @property
     def root_base_clean(self) -> str:
-        from tools.meaning_construction import clean_construction
+        from dpd.meaning_construction import clean_construction
 
         return clean_construction(self.root_base)
 
     @property
     def construction_summary(self) -> str:
-        from tools.meaning_construction import summarize_construction
+        from dpd.meaning_construction import summarize_construction
 
         return summarize_construction(self)
 
     @property
     def construction_clean(self) -> str:
-        from tools.meaning_construction import clean_construction
+        from dpd.meaning_construction import clean_construction
 
         return clean_construction(self.construction)
 
     @property
     def degree_of_completion_html(self) -> str:
-        from tools.degree_of_completion import degree_of_completion
+        from dpd.degree_of_completion import degree_of_completion
 
         return degree_of_completion(self)
 
     @property
     def degree_of_completion(self) -> str:
-        from tools.degree_of_completion import degree_of_completion
+        from dpd.degree_of_completion import degree_of_completion
 
         return degree_of_completion(self, html=False)
 
@@ -734,13 +734,13 @@ class DpdHeadword(Base):
 
     @property
     def lemma_trad(self) -> str:
-        from tools.lemma_traditional import make_lemma_trad
+        from dpd.lemma_traditional import make_lemma_trad
 
         return make_lemma_trad(self)
 
     @property
     def lemma_si(self) -> str:
-        from tools.lemma_traditional import make_lemma_trad_si
+        from dpd.lemma_traditional import make_lemma_trad_si
 
         return make_lemma_trad_si(self)
 
