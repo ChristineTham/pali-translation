@@ -1,7 +1,6 @@
 """Simple lookup of inflected word and display dictionary information"""
 
 import argparse
-import inquirer
 
 # These are the essential imports needed for database operations
 from dpd.db_helpers import get_db_session
@@ -9,6 +8,10 @@ from dpd.db_helpers import get_db_session
 # To access any table, import its corresponding class here
 # Other available options include DpdRoot, DbInfo, and Lookup, etc.
 from dpd.models import DpdHeadword, Lookup
+
+from dpd.translit import auto_translit_to_roman
+from dpd.niggahitas import replace_niggahitas
+
 from grammar import grammar_parse
 
 # Create an ArgumentParser object
@@ -25,7 +28,9 @@ args = parser.parse_args()
 db_session = get_db_session('dpd.db')
 
 for word in args.words:
-    word = word.lower()
+    newword = replace_niggahitas(auto_translit_to_roman(word.lower()))
+    print(f"{word} to {newword}")
+    word = newword
 
     # Example of searching a table using basic filters:
     # Find records where part of speech is "adj" and words start with "a"
@@ -34,6 +39,11 @@ for word in args.words:
         .filter(Lookup.lookup_key == word)
         .first()
     )
+
+    if lookup is None:
+        print(f"{word} not found")
+        continue
+
     # print(lookup)
 
     print(f"Word '{word}': {lookup.headwords}")
