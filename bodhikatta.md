@@ -3,7 +3,7 @@
 ### Bodhikathā
 
 Namo tassa Bhagavato Arahato Sammāsambuddhassa.
-Tena samayena buddho bhagavā uruvelāyaṁ viharati najjā nerañjarāya tīre bodhirukkhamūle paṭhamābhisambuddho. Atha kho bhagavā bodhirukkhamūle sattāhaṁ ekapallaṅkena nisīdi vimuttisukhapaṭisaṁvedī. Variant: vimuttisukhapaṭisaṁvedī → vimuttisukhaṁ paṭisaṁvedī (mr) Atha kho bhagavā rattiyā paṭhamaṁ yāmaṁ paṭiccasamuppādaṁ anulomapaṭilomaṁ manasākāsi—
+Tena samayena buddho bhagavā uruvelāyaṁ viharati najjā nerañjarāya tīre bodhirukkhamūle paṭhamābhisambuddho. Atha kho bhagavā bodhirukkhamūle sattāhaṁ ekapallaṅkena nisīdi vimuttisukhapaṭisaṁvedī. Atha kho bhagavā rattiyā paṭhamaṁ yāmaṁ paṭiccasamuppādaṁ anulomapaṭilomaṁ manasākāsi—
 “Avijjāpaccayā saṅkhārā, saṅkhārapaccayā viññāṇaṁ, viññāṇapaccayā nāmarūpaṁ, nāmarūpapaccayā saḷāyatanaṁ, saḷāyatanapaccayā phasso, phassapaccayā vedanā, vedanāpaccayā taṇhā, taṇhāpaccayā upādānaṁ, upādānapaccayā bhavo, bhavapaccayā jāti, jātipaccayā jarāmaraṇaṁ sokaparidevadukkhadomanassupāyāsā sambhavanti. Evametassa kevalassa dukkhakkhandhassa samudayo hoti.
 Avijjāya tveva asesavirāganirodhā saṅkhāranirodho, saṅkhāranirodhā viññāṇanirodho, viññāṇanirodhā nāmarūpanirodho, nāmarūpanirodhā saḷāyatananirodho, saḷāyatananirodhā phassanirodho, phassanirodhā vedanānirodho, vedanānirodhā taṇhānirodho, taṇhānirodhā upādānanirodho, upādānanirodhā bhavanirodho, bhavanirodhā jātinirodho, jātinirodhā jarāmaraṇaṁ sokaparidevadukkhadomanassupāyāsā nirujjhanti. Evametassa kevalassa dukkhakkhandhassa nirodho hotī”ti.
 Atha kho bhagavā etamatthaṁ viditvā tāyaṁ velāyaṁ imaṁ udānaṁ udānesi—
@@ -24,7 +24,7 @@ Atha kho bhagavā etamatthaṁ viditvā tāyaṁ velāyaṁ imaṁ udānaṁ ud�
 “Yadā have pātubhavanti dhammā,
 Ātāpino jhāyato brāhmaṇassa;
 Vidhūpayaṁ tiṭṭhati mārasenaṁ,
-Sūriyova obhāsayamantalikkhan”ti. Variant: Sūriyova → suriyova (bj, sya-all, km, pts1ed)
+Sūriyova obhāsayamantalikkhan”ti.
 Bodhikathā niṭṭhitā.
 
 Tena samayena buddho bhagavā uruvelāyaṁ viharati najjā nerañjarāya tīre bodhirukkhamūle paṭhamābhisambuddho.

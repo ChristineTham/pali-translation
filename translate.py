@@ -1,10 +1,12 @@
-"""Simple lookup of inflected word and display dictionary information"""
+"""Translate a sentence in Pāli by looking up and classifying each word in DPD first, then using an LLM to do the final translation."""
 
+# Basic libraries
 import sys
 import re
 import argparse
 import inquirer
 
+## Google GenAI API
 from google import genai
 from google.genai import types
 from pprint import pprint
@@ -18,12 +20,14 @@ from dpd.db_helpers import get_db_session
 # Other available options include DpdRoot, DbInfo, and Lookup, etc.
 from dpd.models import DpdHeadword, Lookup
 
+# Transliterate words into standard form
 from dpd.translit import auto_translit_to_roman
 from dpd.niggahitas import replace_niggahitas
 
+# Grammar helper functions
 from grammar import grammar_parse, grammar_explain
 
-
+# Retry when rate limit reached
 is_retriable = lambda e: (isinstance(e, genai.errors.APIError) and e.code in {429, 503})
 
 genai.models.Models.generate_content = retry.Retry(predicate=is_retriable)(
@@ -37,24 +41,13 @@ SYSTEM_INSTRUCTION = """
 You are an accurate Pāli to English translator. You translate Pāli sentences to English by first considering the entire sentence, then consider the grammatical role and meaning of each word in the sentence in a Markdown table that will be provided to you, and then generate as output the translated sentence in natural English.
 """
 
-# # Create an ArgumentParser object
-# parser = argparse.ArgumentParser(description="Pāli word lookup")
-
-# # Add a positional argument that accepts one or more words
-# # 'nargs="+"' means it will accept at least one argument and store them in a list.
-# parser.add_argument('words', nargs='+', help='One or more words to search in dictionary')
-
-# # Parse the arguments
-# args = parser.parse_args()
-
-
 sentence = sys.argv[1]
 
 # Use regex to find all sequences of word characters (letters, numbers, underscore).
 # This effectively discards punctuation as it only extracts word-like sequences.
 # \w in Python 3's re module is Unicode-aware and should handle Pāli characters.
 words = re.findall(r'\w+', sentence.lower())
-print(words)
+# print(words)
 
 # This establishes a connection to the database - use it once to access the database
 db_session = get_db_session('dpd.db')
@@ -67,7 +60,7 @@ for word in words:
     word = replace_niggahitas(auto_translit_to_roman(word.lower()))
     pali.append(word)
 
-    print(f"\n{word}:")
+    print(f"\n\n{word}:")
 
     # Lookup word in dictionary
     lookup = (
@@ -78,14 +71,8 @@ for word in words:
 
     if lookup is None:
         print (f"{word} failed lookup, trying headword")
-        headword = (
-            db_session.query(DpdHeadword)
-            .filter(DpdHeadword.lemma_1 == word)
-            .first()
-        )
-        print(headword)
-        grammar.append([word, headword.pos, "🔼"])
-        meaning.append(headword)
+        grammar.append([word, "unknown", "🔼"])
+        meaning.append(None)
         continue
 
     if lookup.deconstructor:
@@ -99,7 +86,7 @@ for word in words:
     )
     meaning.append(headword)
 
-    print(f"{word}: {headword.meaning_combo} [pos={headword.pos} grammar={headword.grammar} neg={headword.neg} verb={headword.verb} trans={headword.trans} case={headword.plus_case}]")
+    print(f"{word}: {headword.meaning_combo} [pos={headword.pos} grammar={headword.grammar} neg={headword.neg} verb={headword.verb} trans={headword.trans} case={headword.plus_case}]\n")
 
     if lookup.grammar:
         inflection = inquirer.list_input(
