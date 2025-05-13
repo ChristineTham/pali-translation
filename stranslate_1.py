@@ -1,7 +1,6 @@
 ## Google GenAI API
 from google import genai
 from google.genai import types
-from pprint import pprint
 
 from google.api_core import retry
 

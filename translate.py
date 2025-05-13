@@ -57,7 +57,7 @@ grammar = []
 meaning = []
 
 for word in words:
-    word = replace_niggahitas(auto_translit_to_roman(word.lower()))
+    word = replace_niggahitas(auto_translit_to_roman(word))
     pali.append(word)
 
     print(f"\n\n{word}:")
