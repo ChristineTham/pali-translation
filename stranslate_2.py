@@ -1,4 +1,6 @@
 import re
+from dotenv import load_dotenv
+import os
 
 ## Google GenAI API
 from google import genai
@@ -20,6 +22,8 @@ from dpd.niggahitas import replace_niggahitas
 # Grammar helper functions
 from grammar import grammar_parse, grammar_explain
 
+# MODEL="models/gemini-2.5-pro-preview-05-06"
+MODEL="models/gemini-2.5-flash-preview-04-17"
 MAX_TOKENS=8192
 TEMPERATURE=0.3
 
@@ -27,8 +31,13 @@ st.title("Pāli to English translator v2 using DPD and LLM")
 
 conn = st.connection('dpd_db', type='sql')
 
+
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
 if 'client' not in st.session_state:
-    st.session_state['client'] = genai.Client()
+    st.session_state['client'] = genai.Client(api_key=GEMINI_API_KEY)
 
 client = st.session_state['client']
 
@@ -47,7 +56,7 @@ models = st.session_state['models']
 
 defmodel = 0
 for index, model in enumerate(models):
-    if model.name == "models/gemini-2.5-pro-preview-05-06":
+    if model.name == MODEL:
         defmodel = index
 
 with st.sidebar:
@@ -104,7 +113,9 @@ You are an efficient and accurate Pali to English translator.
 Step 1. Read the entire text.
 Step 2. Translate the text as accurately as possible. Do not insert any additional text or explanations.
 Step 3. Don't include preambles, postambles or explanations.
-Step 4. Output the translation only, preserving formatting of the input text, including Markdown headings and other formatting.
+Step 4. Leave honorifics and vocatives like Buddha, bhikkhave etc. untranslated.
+Step 5. For Buddhist technical terms eg. nibbāna, quote the Pāli word with English equivalent in parentheses eg. "nibbāna (extinguishment)"
+Step 6. Output the translation only, preserving formatting of the input text, including Markdown headings and other formatting.
 """
     with st.spinner("Translating using LLM ..."):
         response = generate_content(
@@ -121,12 +132,13 @@ Step 4. Output the translation only, preserving formatting of the input text, in
 if enhanced.button("Translate (DPD+LLM)"):
     with st.spinner("Analysing grammar and meaning ..."):
         system = "You are an accurate Pāli to English translator."
-        prompt1 = "1. Consider the following sentence in Pāli."
-        prompt2 = "\n\n2. Based on the context of the Pāli sentence, select one grammatical role and one meaning for each word from the possible roles and meanings in the following table.\n\n3. Write out your answers as a Markdown table with the following columns: word, grammar role, meaning without any preambles, postambles, quotations.\n"
+        prompt1 = "1. Consider the following text in Pāli.\n\n"
+        prompt2 = "\n\n2. Based on the context of the Pāli text, select one grammatical role and one meaning for each word from the possible roles and meanings in the following table.\n\n"
+        prompt3 = "\n\n3. Write out your answers as a Markdown table with the following columns: word, grammar role, meaning.\n\n4. Do not include any preambles, postambles, quotations enclosing the Markdown table."
 
         response = generate_content(
             model=model.name,
-            contents=[prompt1, pali, prompt2, lookups],
+            contents=[prompt1, pali, prompt2, lookups, prompt3],
             config=types.GenerateContentConfig(
                 system_instruction=system,
                 max_output_tokens=MAX_TOKENS,
@@ -137,20 +149,30 @@ if enhanced.button("Translate (DPD+LLM)"):
 
     with st.spinner("Translating based on analysis ..."):
         system = "You are an accurate Pāli to English translator."
-        prompt1 = "1. Consider the following sentence in Pāli:\n"
+        prompt1 = "1. Consider the following text in Pāli:\n"
         prompt2 = "\n\n2. Now consider the grammatical roles and meanings of each word in the following table:\n"
-        prompt3 = "\n\n3. Translate the sentence as accurately as you can into natural English considering the grammatical role and meaning of each word in the sentence from the above table as a reference. Output the translation preserving formatting of the input text, including Markdown headings and other formatting. Don't include preambles, postambles or explanations."
+        prompt3 = """
 
-        response = generate_content(
-            model=model.name,
-            contents=[prompt1, pali, prompt2, analysis, prompt3],
-            config=types.GenerateContentConfig(
-                system_instruction=system,
-                max_output_tokens=MAX_TOKENS,
-                temperature=temperature,
-            ),
-        )
-        grounded = response.text
+3. Translate the text as accurately as you can into natural English considering the grammatical role and meaning of each word in the sentence from the above table as a reference.
+4. Don't include preambles, postambles or explanations.
+5. Leave honorifics and vocatives like Buddha, bhikkhave etc. untranslated.
+6. For Buddhist technical terms eg. nibbāna, quote the Pāli word with English equivalent in parentheses eg. "nibbāna (extinguishment)"
+7. Output the translation only, preserving formatting of the input text, including Markdown headings and other formatting.
+"""
+
+        if analysis is not None and analysis != "":
+            response = generate_content(
+                model=model.name,
+                contents=[prompt1, pali, prompt2, analysis, prompt3],
+                config=types.GenerateContentConfig(
+                    system_instruction=system,
+                    max_output_tokens=MAX_TOKENS,
+                    temperature=temperature,
+                ),
+            )
+            grounded = response.text
+        else:
+            grounded = "Not done because analysis failed."
 
 translation_tab, dpd_tab = st.tabs(["Translation", "DPD Analysis"])
 
