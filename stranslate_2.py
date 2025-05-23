@@ -23,7 +23,7 @@ from dpd.niggahitas import replace_niggahitas
 from grammar import grammar_parse, grammar_explain
 
 # MODEL="models/gemini-2.5-pro-preview-05-06"
-MODEL="models/gemini-2.5-flash-preview-04-17"
+MODEL="models/gemini-2.5-flash-preview-05-20"
 MAX_TOKENS=8192
 TEMPERATURE=0.3
 
@@ -182,15 +182,15 @@ with dpd_tab:
 with translation_tab:
     st.subheader("Pāli")
     st.markdown(pali)
-    if len(analysis) > 0:
+    if analysis and len(analysis) > 0:
         st.subheader("Analysis")
         st.markdown(analysis)
-    if len(naive) > 0:
+    if naive and len(naive) > 0:
         st.subheader("Translation (LLM)")
         st.markdown(naive)
         st.subheader("Markdown")
         st.code(naive, language="markdown")
-    if len(grounded) > 0:
+    if grounded and len(grounded) > 0:
         st.subheader("Translation (DPD+LLM)")
         st.markdown(grounded)
         st.subheader("Markdown")
